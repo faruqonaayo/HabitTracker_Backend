@@ -1,9 +1,11 @@
 import express from "express";
-import dotenv from "dotenv";
+// import dotenv from "dotenv";
+import loadEnv from "./util/envConfig.js";
 import mongoose from "mongoose";
 import cors from "cors";
 import bodyParser from "body-parser";
 
+// importing the routes
 import authRoutes from "./routes/auth.js";
 
 const app = express();
@@ -12,7 +14,7 @@ const PORT = 3000;
 app.use(cors());
 
 // loading the content in .env file to the process.env object
-dotenv.config();
+loadEnv();
 
 // middleware to parse the request body
 app.use(bodyParser.json());
