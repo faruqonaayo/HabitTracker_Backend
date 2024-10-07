@@ -82,7 +82,7 @@ export async function postLogin(req, res, next) {
       const isUserExist = await User.findOne({
         email: req.body.email,
       });
-      console.log(isUserExist);
+
       if (!isUserExist) {
         return res.status(401).send(
           JSON.stringify({
