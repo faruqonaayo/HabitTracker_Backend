@@ -17,14 +17,14 @@ export async function putSignUp(req, res, next) {
     if (errors.length > 0 || isEmailExist) {
       if (isEmailExist) {
         return res
-          .status(400)
+          .status(422)
           .send(
-            JSON.stringify({ message: "Email already exists", statusCode: 400 })
+            JSON.stringify({ message: "Email already exists", statusCode: 422 })
           );
       }
       return res
-        .status(400)
-        .send(JSON.stringify({ message: errors[0].msg, statusCode: 400 }));
+        .status(422)
+        .send(JSON.stringify({ message: errors[0].msg, statusCode: 422 }));
     }
 
     //   console.log(req.body);
@@ -38,6 +38,7 @@ export async function putSignUp(req, res, next) {
         email: req.body.email,
         password: hash,
         habitTokens: 25000,
+        habits: [],
       });
 
       await newUser.save();

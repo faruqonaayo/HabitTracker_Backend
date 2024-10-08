@@ -7,7 +7,7 @@ loadEnv();
 
 export function generateToken(payload, cb) {
   jwt.sign(
-    payload,
+    { ...payload, expiry: Date.now() + 60 * 60 * 1000 },
     process.env.JWT_SECRET,
     (err, token) => {
       if (err) {
@@ -23,22 +23,27 @@ export function generateToken(payload, cb) {
 }
 
 export function verifyToken(token, cb) {
-  jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
-    try {
-      if (err || !decoded) {
-        return cb(false);
-      }
-      const findUser = await User.findOne({
-        _id: decoded.id,
-        email: decoded.email,
-      });
+  jwt.verify(
+    token,
+    process.env.JWT_SECRET,
 
-      if (findUser) {
-        return cb(findUser._id);
+    async (err, decoded) => {
+      try {
+        if (err || !decoded || Date.now() > decoded.expiry) {
+          return cb(false);
+        }
+        const findUser = await User.findOne({
+          _id: decoded.id,
+          email: decoded.email,
+        });
+
+        if (findUser) {
+          return cb(findUser._id);
+        }
+        return cb(false);
+      } catch (error) {
+        console.log(error);
       }
-      return cb(false);
-    } catch (error) {
-      console.log(error);
     }
-  });
+  );
 }
