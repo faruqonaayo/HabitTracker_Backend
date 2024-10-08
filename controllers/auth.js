@@ -37,7 +37,7 @@ export async function putSignUp(req, res, next) {
         lastName: req.body.lastName,
         email: req.body.email,
         password: hash,
-        habitTokens: 0,
+        habitTokens: 25000,
       });
 
       await newUser.save();
