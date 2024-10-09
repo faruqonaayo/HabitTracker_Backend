@@ -55,4 +55,7 @@ router.put(
   adminController.putHabit
 );
 
+router.get("/allHabits", adminController.getAllHabits);
+
+router.post("/checkHabit", adminController.checkHabit);
 export default router;
